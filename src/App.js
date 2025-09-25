@@ -9,6 +9,7 @@ function Square({value, onSquareClick}) {
 }
 
 export default function Board() {
+  const [history, setHistory] = useState([Array(9).fill(null)]);
   const [xIsNext, setXIsNext] = useState(true);
   const [squares, setSquares] = useState(Array(9).fill(null));
 
@@ -22,6 +23,7 @@ export default function Board() {
     } else {
       nextSquares[i] = 'O';
     }
+    setHistory([...history, nextSquares]);
     setSquares(nextSquares);
     setXIsNext(!xIsNext);
   }
