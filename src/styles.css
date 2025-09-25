@@ -3,9 +3,14 @@
 }
 
 body {
-  font-family: sans-serif;
-  margin: 20px;
-  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
@@ -46,45 +51,187 @@ ul {
   padding-inline-start: 20px;
 }
 
-* {
-  box-sizing: border-box;
+/* Game Title */
+.game-title {
+  text-align: center;
+  color: #2d1b2d;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  text-shadow: 
+    2px 2px 4px rgba(255,255,255,0.8),
+    4px 4px 8px rgba(0,0,0,0.3);
+  letter-spacing: 2px;
 }
 
-body {
-  font-family: sans-serif;
-  margin: 20px;
-  padding: 0;
+@keyframes titleGlow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(255, 154, 158, 0.5));
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(255, 154, 158, 0.8));
+  }
+}
+
+/* Main Game Container */
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+  max-width: 600px;
+  width: 100%;
+}
+
+.game-board {
+  margin-bottom: 2rem;
+}
+
+/* Board Styling */
+.board-row {
+  display: flex;
+  justify-content: center;
 }
 
 .square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  border: 3px solid #4a5568;
+  font-size: 2.5rem;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
+  height: 80px;
+  width: 80px;
+  margin: 2px;
   text-align: center;
-  width: 34px;
-}
-
-.board-row:after {
-  clear: both;
-  content: '';
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
-.game {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
+.square:hover {
+  background: linear-gradient(145deg, #e0e0e0, #d0d0d0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.square:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* X and O Styling */
+.square:not(:empty) {
+  background: linear-gradient(145deg, #ffb3ba, #ff9a9e);
+  color: #8b5a83;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+}
+
+/* X squares - Pink theme */
+.square:not(:empty)[data-value="X"] {
+  background: linear-gradient(145deg, #ff9a9e, #ff6b6b);
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* O squares - Lavender theme */
+.square:not(:empty)[data-value="O"] {
+  background: linear-gradient(145deg, #c7ceea, #a8e6cf);
+  color: #5a3a5a;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+}
+
+/* Status Styling */
+.status {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #2d3748;
+  padding: 1rem;
+  background: linear-gradient(145deg, #f7fafc, #edf2f7);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Game Info Styling */
 .game-info {
-  margin-left: 20px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.game-info ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.game-info li {
+  margin-bottom: 0.5rem;
+}
+
+.game-info button {
+  background: linear-gradient(145deg, #ff9a9e, #fecfef);
+  color: #8b5a83;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.game-info button:hover {
+  background: linear-gradient(145deg, #ff8a8a, #fec0ef);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.game-info button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .game-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .square {
+    height: 60px;
+    width: 60px;
+    font-size: 2rem;
+  }
+  
+  .status {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .square {
+    height: 50px;
+    width: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .game-title {
+    font-size: 1.5rem;
+  }
 }

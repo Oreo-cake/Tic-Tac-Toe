@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-function Square({ value, onSquareClick }) {
+function Square({ value, onSquareClick, isWinning }) {
   return (
-    <button className="square" onClick={onSquareClick}>
+    <button className={`square ${isWinning ? 'winning' : ''}`} onClick={onSquareClick} data-value={value}>
       {value}
     </button>
   );
@@ -23,6 +23,7 @@ function Board({ xIsNext, squares, onPlay }) {
   }
 
   const winner = calculateWinner(squares);
+  const winnerLine = getWinnerLine(squares);
   let status;
   if (winner) {
     status = 'Winner: ' + winner;
@@ -34,36 +35,38 @@ function Board({ xIsNext, squares, onPlay }) {
     <>
       <div className="status">{status}</div>
       <div className="board-row">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} isWinning={winnerLine && winnerLine.includes(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} isWinning={winnerLine && winnerLine.includes(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} isWinning={winnerLine && winnerLine.includes(2)} />
       </div>
       <div className="board-row">
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} isWinning={winnerLine && winnerLine.includes(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} isWinning={winnerLine && winnerLine.includes(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} isWinning={winnerLine && winnerLine.includes(5)} />
       </div>
       <div className="board-row">
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} isWinning={winnerLine && winnerLine.includes(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} isWinning={winnerLine && winnerLine.includes(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} isWinning={winnerLine && winnerLine.includes(8)} />
       </div>
     </>
   );
 }
 
 export default function Game() {
-  const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentSquares = history[history.length - 1];
+  const [currentMove, setCurrentMove] = useState(0);
+  const xIsNext = currentMove % 2 === 0;
+  const currentSquares = history[currentMove];
 
   function handlePlay(nextSquares) {
-    setHistory([...history, nextSquares]);
-    setXIsNext(!xIsNext);
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
   }
 
   function jumpTo(nextMove) {
-    // TODO
+    setCurrentMove(nextMove);
   }
 
   const moves = history.map((squares, move) => {
@@ -82,6 +85,7 @@ export default function Game() {
 
   return (
     <div className="game">
+      <h1 className="game-title">🌸 Tic Tac Toe 🌸</h1>
       <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
@@ -112,5 +116,24 @@ function calculateWinner(squares) {
   return null;
 }
 
+function getWinnerLine(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return lines[i];
+    }
+  }
+  return null;
+}
 
 
